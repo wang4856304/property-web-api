@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PreOrder">
+    <insert id="createWaterOrder" parameterType="java.util.List">
+        insert into water_order_test(water_order_id, room_id, price, year, month,  create_time) values
+        <foreach collection="list" index="index" item="orderBo" separator=",">
+            (#{orderBo.orderId}, #{orderBo.roomId}, #{orderBo.price}, #{orderBo.year}, #{orderBo.month}, #{orderBo.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="createWasteOrder" parameterType="java.util.List">
+        insert into waste_order_test(waste_order_id, room_id, price, year, month,  create_time) values
+        <foreach collection="list" index="index" item="orderBo" separator=",">
+            (#{orderBo.orderId}, #{orderBo.roomId}, #{orderBo.price}, #{orderBo.year}, #{orderBo.month}, #{orderBo.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="createPowerOrder" parameterType="java.util.List">
+        insert into power_order_test(power_order_id, room_id, price, year, month,  create_time) values
+        <foreach collection="list" index="index" item="orderBo" separator=",">
+            (#{orderBo.orderId}, #{orderBo.roomId}, #{orderBo.price}, #{orderBo.year}, #{orderBo.month}, #{orderBo.createTime})
+        </foreach>
+    </insert>
+
+    <select id="getRoomListByCommunity" parameterType="string" resultType="roomPo">
+        select room_id roomId from room where community_id=#{communityId}
+    </select>
+
+    <select id="getRoomWaterConfigList" parameterType="java.util.List" resultType="roomCostConfigPo">
+        select room_id roomId, price from water_configuration where room_id in
+        <foreach collection="list" index="index" item="roomId" separator="," open="(" close=")">
+            #{roomId}
+        </foreach>
+    </select>
+
+    <select id="getRoomWasteConfigList" parameterType="java.util.List" resultType="roomCostConfigPo">
+        select room_id roomId, price from waste_configuration where room_id in
+        <foreach collection="list" index="index" item="roomId" separator="," open="(" close=")">
+            #{roomId}
+        </foreach>
+    </select>
+
+    <select id="getRoomPowerConfigList" parameterType="java.util.List" resultType="roomCostConfigPo">
+        select room_id roomId, price from power_configuration where room_id in
+        <foreach collection="list" index="index" item="roomId" separator="," open="(" close=")">
+            #{roomId}
+        </foreach>
+    </select>
+</mapper>

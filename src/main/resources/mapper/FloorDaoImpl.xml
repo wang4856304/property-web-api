@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Floor">
+    <select id="getFloorListByCommunityId" parameterType="string" resultType="floorPo">
+        select floor_id floorId, floor_name floorName from floor where community_id=#{communityId}
+    </select>
+    <select id="getFloorById" parameterType="string" resultType="floorPo">
+        select floor_id floorId, floor_name floorName from floor where floor_id=#{floorId}
+    </select>
+</mapper>

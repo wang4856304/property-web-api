@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Room">
+    <select id="getDefaultBindRoom" parameterType="string" resultType="string">
+        select room_id from customer_room where customer_id=#{customerId} and is_default=1
+    </select>
+
+    <select id="getRoomList" parameterType="string" resultType="string">
+        select room_id from customer_room where customer_id=#{customerId}
+    </select>
+
+    <select id="getRoomById" parameterType="string" resultType="roomPo">
+        select room_name roomName, layer_name layerName, unit_name unitName, floor_name floorName, community_name communityName,
+        province, city, address from room r, layer l, unit u, floor f, community c where room_id=#{roomId} and r.layer_id=l.layer_id
+        and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+
+    <update id="updateDefaultBindRoom" parameterType="roomBo">
+        update customer_room set is_default=1 where customer_id=#{customer_id} and room_id=#{roomId}
+    </update>
+
+    <update id="updateOtherRoomDefault" parameterType="roomBo">
+        update customer_room set is_default=0 where customer_id=#{customer_id} and room_id!=#{roomId}
+    </update>
+
+    <insert id="bindRoom" parameterType="roomBo">
+        insert into customer_room(id, customer_id, room_id, is_default) value(#{id}, #{customerId}, #{roomId}, 1)
+    </insert>
+    
+    <delete id="deleteBindRoom" parameterType="roomBo">
+        delete from customer_room where customer_id=#{customer_id} and room_id=#{roomId}
+    </delete>
+
+    <select id="getRoomProperty" parameterType="roomBo" resultType="roomPo">
+        select o.owner_name ownerName, o.telephone ownerTel, r.room_id roomId, room_name roomName, layer_name layerName, unit_name unitName,
+        floor_name floorName, community_name communityName, r.acreage, pmc.charge_type chargeType,
+        pmc.price price from room r, layer l, unit u, floor f, community c, property_management_configuration pmc, owner o
+        where c.community_id=#{communityId} and r.room_name=#{roomName} and r.room_id=pmc.room_id and r.owner_id=o.owner_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+    <update id="updateRoomPropertyPrice" parameterType="java.util.List" >
+        update property_management_configuration
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.price!=null">
+                        when room_id=#{i.roomId} then #{i.price}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            room_id=#{i.roomId}
+        </foreach>
+    </update>
+
+    <select id="getRoomPower" parameterType="roomBo" resultType="roomPo">
+        select o.owner_name ownerName, o.telephone ownerTel, r.room_id roomId, room_name roomName, layer_name layerName, unit_name unitName,
+        floor_name floorName, community_name communityName, r.acreage, pmc.charge_type chargeType, pmc.standard, pmc.charge_type chargeType,
+        pmc.price price from room r, layer l, unit u, floor f, community c, power_configuration pmc, owner o
+        where c.community_id=#{communityId} and r.room_name=#{roomName} and r.room_id=pmc.room_id and r.owner_id=o.owner_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+
+    <update id="updateRoomPowerPrice" parameterType="java.util.List" >
+        update power_configuration
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.price!=null">
+                        when room_id=#{i.roomId} then #{i.price}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            room_id=#{i.roomId}
+        </foreach>
+    </update>
+
+    <select id="getRoomWater" parameterType="roomBo" resultType="roomPo">
+        select o.owner_name ownerName, o.telephone ownerTel, r.room_id roomId, room_name roomName, layer_name layerName, unit_name unitName,
+        floor_name floorName, community_name communityName, r.acreage, pmc.charge_type chargeType, pmc.standard, pmc.charge_type chargeType,
+        pmc.price price from room r, layer l, unit u, floor f, community c, water_configuration pmc, owner o
+        where c.community_id=#{communityId} and r.room_name=#{roomName} and r.room_id=pmc.room_id and r.owner_id=o.owner_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+
+    <update id="updateRoomWaterPrice" parameterType="java.util.List" >
+        update water_configuration
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.price!=null">
+                        when room_id=#{i.roomId} then #{i.price}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            room_id=#{i.roomId}
+        </foreach>
+    </update>
+
+    <select id="getRoomElevator" parameterType="roomBo" resultType="roomPo">
+        select o.owner_name ownerName, o.telephone ownerTel, r.room_id roomId, room_name roomName, layer_name layerName, unit_name unitName,
+        floor_name floorName, community_name communityName, r.acreage, pmc.charge_type chargeType, pmc.standard, pmc.charge_type chargeType,
+        pmc.price price from room r, layer l, unit u, floor f, community c, elevator_configuration pmc, owner o
+        where c.community_id=#{communityId} and r.room_name=#{roomName} and r.room_id=pmc.room_id and r.owner_id=o.owner_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+
+    <update id="updateRoomElevatorPrice" parameterType="java.util.List" >
+        update elevator_configuration
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.price!=null">
+                        when room_id=#{i.roomId} then #{i.price}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            room_id=#{i.roomId}
+        </foreach>
+    </update>
+
+    <select id="getRoomEnergy" parameterType="roomBo" resultType="roomPo">
+        select o.owner_name ownerName, o.telephone ownerTel, r.room_id roomId, room_name roomName, layer_name layerName, unit_name unitName,
+        floor_name floorName, community_name communityName, r.acreage, pmc.charge_type chargeType, pmc.standard, pmc.charge_type chargeType,
+        pmc.price price from room r, layer l, unit u, floor f, community c, energy_overt_configuration pmc, owner o
+        where c.community_id=#{communityId} and r.room_name=#{roomName} and r.room_id=pmc.room_id and r.owner_id=o.owner_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+
+    <update id="updateRoomEnergyPrice" parameterType="java.util.List" >
+        update energy_overt_configuration
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.price!=null">
+                        when room_id=#{i.roomId} then #{i.price}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            room_id=#{i.roomId}
+        </foreach>
+    </update>
+
+    <select id="getRoomWaste" parameterType="roomBo" resultType="roomPo">
+        select o.owner_name ownerName, o.telephone ownerTel, r.room_id roomId, room_name roomName, layer_name layerName, unit_name unitName,
+        floor_name floorName, community_name communityName, r.acreage, pmc.charge_type chargeType, pmc.standard, pmc.charge_type chargeType,
+        pmc.price price from room r, layer l, unit u, floor f, community c, waste_configuration pmc, owner o
+        where c.community_id=#{communityId} and r.room_name=#{roomName} and r.room_id=pmc.room_id and r.owner_id=o.owner_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=c.community_id
+    </select>
+
+    <update id="updateRoomWastePrice" parameterType="java.util.List" >
+        update waste_configuration
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.price!=null">
+                        when room_id=#{i.roomId} then #{i.price}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            room_id=#{i.roomId}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <typeAlias type="com.happy.entity.bo.OrderBo" alias="orderBo"/>
+        <typeAlias type="com.happy.entity.bo.RoomBo" alias="roomBo"/>
+        <typeAlias type="com.happy.entity.po.RoomPo" alias="roomPo"/>
+        <typeAlias type="com.happy.entity.bo.SequenceBo" alias="sequenceBo"/>
+        <typeAlias type="com.happy.entity.po.RoomCostConfigPo" alias="roomCostConfigPo"/>
+        <typeAlias type="com.happy.entity.po.UserPo" alias="userPo"/>
+        <typeAlias type="com.happy.entity.bo.UserBo" alias="userBo"/>
+        <typeAlias type="com.happy.entity.po.MenuPo" alias="menuPo"/>
+        <typeAlias type="com.happy.entity.bo.MenuBo" alias="menuBo"/>
+        <typeAlias type="com.happy.entity.po.CommunityPo" alias="communityPo"/>
+        <typeAlias type="com.happy.entity.po.FloorPo" alias="floorPo"/>
+        <typeAlias type="com.happy.entity.po.OwnerPo" alias="ownerPo"/>
+        <typeAlias type="com.happy.entity.bo.OwnerBo" alias="ownerBo"/>
+        <typeAlias type="com.happy.entity.bo.ParkingSpaceBo" alias="parkingSpaceBo"/>
+        <typeAlias type="com.happy.entity.bo.CostConfigBo" alias="costConfigBo"/>
+        <typeAlias type="com.happy.entity.bo.CostConfigModeBo" alias="costConfigModeBo"/>
+        <typeAlias type="com.happy.entity.po.UnitPo" alias="unitPo"/>
+        <typeAlias type="com.happy.entity.po.CostConfigPo" alias="costConfigPo"/>
+    </typeAliases>
+
+
+</configuration>

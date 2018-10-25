@@ -1,0 +1,10 @@
+server:
+   port: 9820
+mobile: 15289288565
+project: qiusheng-web
+spring:
+   profiles:
+      active: dev
+
+
+
