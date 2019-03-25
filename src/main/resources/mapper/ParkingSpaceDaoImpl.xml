@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ParkingSpace">
+    <insert id="insertParkingSpace" parameterType="parkingSpaceBo">
+        insert into parkingspace(owner_id, code, type, community_id, is_free, is_sale) values(#{ownerId}, #{parkNumber}, #{parkType},
+        #{communityId}, #{isFree}, #{isSale})
+    </insert>
+
+    <update id="updateParkingSpacePrice" parameterType="java.util.List">
+        update parkingspace
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.mangerPrice!=null">
+                        when type=#{i.parkType} and is_free=#{i.isFree} and is_sale=#{i.isSale} and community_id=#{i.communityId} then #{i.mangerPrice}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="rent_price =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.rentPrice!=null">
+                        when type=#{i.parkType} and is_free=#{i.isFree} and is_sale=#{i.isSale} and community_id=#{i.communityId} then #{i.rentPrice}
+                    </if>
+                </foreach>
+            </trim>
+
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            type=#{i.parkType} and is_free=#{i.isFree} and is_sale=#{i.isSale}
+        </foreach>
+    </update>
+</mapper>
+

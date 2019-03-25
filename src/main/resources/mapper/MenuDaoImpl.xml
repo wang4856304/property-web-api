@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Menu">
+    <select id="getMenuListById" parameterType="string" resultType="menuPo">
+        select menu_name title, page href, icon from menu m, manager ma, role r, manager_role mr, role_menu rm
+        where ma.manager_id=mr.manager_id and mr.role_id=r.role_id and r.role_id=rm.role_id and rm.menu_id=m.menu_id
+        and ma.manager_id=#{managerId}
+    </select>
+
+    <select id="getAllMenuList" parameterType="string" resultType="menuPo">
+        select menu_name title, page href, icon from menu
+    </select>
+</mapper>

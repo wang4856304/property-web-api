@@ -1,0 +1,75 @@
+logging:
+   config: classpath:log4j2.xml
+env: dev
+spring:
+   dataSource:
+      master:
+         driverClassName: com.mysql.jdbc.Driver
+         url: jdbc:mysql://127.0.0.1:3306/service?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+         username: root
+         password: 123456
+         initialSize: 20
+         minIdle: 5
+         maxActive: 30
+         maxWait: 30000
+         removeAbandoned: true
+         removeAbandonedTimeoutMillis: 300000
+         defaultAutoCommit: false
+         timeBetweenEvictionRunsMillis: 60000
+         minEvictableIdleTimeMillis: 300000
+         validationQuery: SELECT 1
+         testWhileIdle: true
+         connectionInitSql: set names utf8mb4
+
+   redis:
+#      cluster:
+#         clusterNodes: 172.18.103.198:6379
+#         password: xatwsz.com
+#         expireSeconds: 120
+#         commandTimeout: 10000  #redis操作的超时时间
+#         pool:
+#           maxActive: 8
+#           maxWait: 1000
+#           maxIdle: 8
+#           minIdle: 2
+      noCluster:
+         database: 9
+         host: 127.0.0.1
+         port: 6379
+         #password: xatwsz.com
+         maxActive: 100
+         maxWait: 3000
+         maxIdle: 8
+         minIdle: 2
+         timeout: 1000
+         testOnBorrow: true
+#用户url
+smsSendUrl: http://172.18.103.202:9800/smsSend/sendVerifyCode
+userUrl: http://172.18.103.202:9800
+
+zookeeper:
+   host: 192.168.88.128:2181
+
+wx:
+   auth:
+      appId: wx0b5c52b28ec0a767
+      secret: 4b9e24be6c6190a4827eb1a122d59f1f
+      code:
+         url: https://open.weixin.qq.com/connect/oauth2/authorize?
+         #redirectUrl: http://127.0.0.1:9810/wx/getAccessToken
+         redirectUrl: http://www.happyhome.org.cn/wx/auth/getAccessToken
+         responseType: code
+         scope: snsapi_userinfo
+         state: wechat_redirect
+      accessToken:
+         url: https://api.weixin.qq.com/sns/oauth2/access_token?
+         grantType: authorization_code
+      customerInfo:
+         url: https://api.weixin.qq.com/sns/userinfo?
+
+property:
+   index:
+      url: http://www.happyhome.org.cn/wechat/index.html
+Snowflake:
+   workerId: 0
+   dataCenterId: 0

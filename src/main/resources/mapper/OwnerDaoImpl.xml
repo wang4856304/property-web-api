@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Owner">
+    <select id="getOwner" parameterType="ownerBo" resultType="ownerPo">
+        select owner_id ownerId, owner_name ownerName from owner where community_id=#{communityId} and idcard_number=#{idCardNumber}
+    </select>
+    <insert id="addOwner" parameterType="ownerBo">
+        insert into owner(owner_id, owner_name, telephone, sex, country, province, city, area, address, idcard_number, community_id) values
+        (#{ownerId}, #{ownerName}, #{telephone}, #{sex}, #{country}, #{province}, #{city}, #{area}, #{address}, #{idCardNumber}, #{communityId})
+    </insert>
+</mapper>

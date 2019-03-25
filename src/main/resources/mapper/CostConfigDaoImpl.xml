@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CostConfigMode">
+    <update id="updateProperty" parameterType="costConfigModeBo">
+        update property_management_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+
+    </update>
+
+    <update id="updatePropertyPrice" parameterType="costConfigModeBo">
+        update property_management_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=#{propertyPrice} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+
+    </update>
+
+    <update id="updateWaste" parameterType="costConfigModeBo">
+        update waste_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+    </update>
+
+    <update id="updateWastePrice" parameterType="costConfigModeBo">
+        update waste_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=#{wastePrice} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updateEnergy" parameterType="costConfigModeBo">
+        update energy_overt_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+    </update>
+
+    <update id="updateEnergyPrice" parameterType="costConfigModeBo">
+        update energy_overt_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=#{energyPrice} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updateElevator" parameterType="costConfigModeBo">
+        update elevator_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+    </update>
+
+    <update id="updateElevatorPrice" parameterType="costConfigModeBo">
+        update elevator_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=ROUND(#{elevatorPrice}*power((1+#{elevatorIncrease}), l.layer_name-1), 2) where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId} and l.layer_name>=#{elevatorStartLayer}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updateWater" parameterType="costConfigModeBo">
+        update water_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+    </update>
+
+    <update id="updateWaterPrice" parameterType="costConfigModeBo">
+        update water_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=#{waterPrice} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updatePower" parameterType="costConfigModeBo">
+        update power_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+    </update>
+
+    <update id="updatePowerPrice" parameterType="costConfigModeBo">
+        update power_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=#{powerPrice} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updateHeat" parameterType="costConfigModeBo">
+        update heater_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.charge_type=#{chargeType},
+         pmc.standard=#{standard} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+    </update>
+
+    <update id="updateHeatPrice" parameterType="costConfigModeBo">
+        update heater_configuration pmc, room r, layer l, unit u, floor f, community co set pmc.price=#{heatPrice} where pmc.room_id=r.room_id
+        and r.layer_id=l.layer_id and l.unit_id=u.unit_id and u.floor_id=f.floor_id and f.community_id=co.community_id and co.community_id=#{communityId}
+        <if test="unitIdList!=null and unitIdList.size()>0">
+            and f.floor_id=#{floorId} and u.unit_id in
+            <foreach collection="unitIdList" item="unitId" index="i" separator="," open="(" close=")">
+                #{unitId}
+            </foreach>
+        </if>
+        <if test="unitIdList==null or unitIdList.size()==0">
+            and f.floor_id in
+            <foreach collection="floorIdList" item="floorId" index="i" separator="," open="(" close=")">
+                #{floorId}
+            </foreach>
+        </if>
+    </update>
+
+    <select id="getPropertyModeConfig" resultType="costConfigPo">
+        select type, name from property_mode_config order by type desc;
+    </select>
+
+    <select id="getWasteModeConfig" resultType="costConfigPo">
+        select type, name from waste_mode_config order by type desc;
+    </select>
+
+    <select id="getEnergyOvertModeConfig" resultType="costConfigPo">
+        select type, name from energy_overt_mode_config order by type desc;
+    </select>
+
+    <select id="getElevatorModeConfig" resultType="costConfigPo">
+        select type, name from elevator_mode_config order by type desc;
+    </select>
+
+    <select id="getWaterModeConfig" resultType="costConfigPo">
+        select type, name from water_mode_config order by type desc;
+    </select>
+
+    <select id="getPowerModeConfig" resultType="costConfigPo">
+        select type, name from power_mode_config order by type desc;
+    </select>
+
+    <select id="getHeatModeConfig" resultType="costConfigPo">
+        select type, name from heat_mode_config order by type desc;
+    </select>
+</mapper>

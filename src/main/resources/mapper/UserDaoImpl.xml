@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+    <select id="getUserByNameAndPwd" parameterType="userBo" resultType="userPo">
+        select manager_id managerId, is_activation isActivation, community_id communityId from manager where user_name=#{userName} and pass_word=#{password}
+    </select>
+    <update id="updateUserLoginInfo" parameterType="userBo">
+        update manager
+        <set>
+            <if test="ip!=null and ip!=''">
+                ip=#{ip},
+            </if>
+            LAST_LOGIN_TIME=#{lastLoginTime}
+        </set>
+        where user_name=#{userName}
+    </update>
+
+    <select id="getUserById" parameterType="userBo" resultType="userPo">
+        select manager_id managerId, user_name userName from manager where manager_id=#{managerId}
+    </select>
+
+    <select id="getUserInfoById" parameterType="userBo" resultType="userPo">
+        select m.manager_id managerId, m.user_name userName, cu.community_id communityId, cu.community_name communityName,
+        co.company_id companyId, co.company_name companyName, co.logo companyLogUrl from manager m, community cu, company co
+        where manager_id=#{managerId} and m.community_id=cu.community_id and cu.belong_company_id=co.company_id
+    </select>
+</mapper>
+
