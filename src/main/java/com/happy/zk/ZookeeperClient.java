@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
 
-@Component
+//@Component
 public class ZookeeperClient extends AbstractZookeeper implements Watcher {
     private static Log log = LogFactory.getLog(ZookeeperClient.class);
 

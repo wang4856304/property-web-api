@@ -8,12 +8,23 @@ spring:
    messages:
       basename: i18n/messages
       encoding: UTF-8
+   jpa:
+      database: mysql
+      generate-ddl: true
+      hibernate:
+         ddl-auto: update
+         naming:
+            physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      show-sql: true
+
 
 idCenter:
    workerId: 2
    dataCenterId: 1
    zookeeper:
       host: 127.0.0.1:2181
+
+
 
 #liquibase:
 #   change-log: classpath:liquibase/master.xml

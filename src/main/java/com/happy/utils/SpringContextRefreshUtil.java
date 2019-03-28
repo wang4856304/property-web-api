@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SpringContextRefreshUtil implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
-    private ZookeeperClient zookeeperClient;
+    //@Autowired
+    //private ZookeeperClient zookeeperClient;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext().getParent() == null) {

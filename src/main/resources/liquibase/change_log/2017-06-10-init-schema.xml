@@ -3,34 +3,15 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <property name="autoIncrement" value="true" dbms="mysql"/>
     <changeSet id="init-schema" author="wangjun">
-        <comment>init schema</comment>
-        <createTable tableName="user">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="nick_name" type="varchar(255)">
-                <constraints  nullable="false"/>
-            </column>
-            <column name="email" type="varchar(255)">
-                <constraints  nullable="false"/>
-            </column>
-            <column name="register_time" type="timestamp"  defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <modifySql dbms="mysql">
-            <append value="ENGINE=INNODB DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_general_ci"/>
-        </modifySql>
-    </changeSet>
-    
-    <changeSet id="2" author="wangjun">
-        <addColumn tableName="user">
-            <column name="sex" type="varchar(5)" remarks="性别">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
+        <sql>
+            create table user(
+            `ID` bigint(20) not null primary key auto_increment  comment'主键',
+            `NICK_NAME` varchar(128) default '' comment '昵称',
+            `EMAIL` varchar(128) default '' comment '电子邮件',
+            `CREATE_AT`            timestamp not null default CURRENT_TIMESTAMP  comment '创建时间',
+            `UPDATE_AT`            timestamp not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  comment '更新时间'
+            )ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户表' ROW_FORMAT = Compact;
+        </sql>
     </changeSet>
 </databaseChangeLog>
