@@ -1,14 +1,18 @@
 package com.happy.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.happy.entity.Response;
 import com.happy.entity.dto.UserChangePwdDto;
 import com.happy.entity.dto.UserDto;
 import com.happy.entity.dto.UserLoginDto;
 import com.happy.entity.dto.UserResetPwdDto;
+import com.happy.enums.ResultEnum;
 import com.happy.service.UserService;
+import com.happy.utils.HttpClientUtil;
 import com.happy.utils.NetUtil;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,18 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Value("${security.oauth2.client.access-token-uri}")
+    private String oauthTokenUrl;
+
+    @Value("${security.oauth2.client.client-id}")
+    private String clientId;
+
+    @Value("${security.oauth2.client.client-secret}")
+    private String clientSecret;
+
+    @Value("${security.oauth2.client.grant-type}")
+    private String grantType;
 
     /**
      * 用户注册
@@ -61,9 +77,34 @@ public class UserController extends BaseController {
      * @param ip
      * @return
      */
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public Object login(@RequestParam @NotBlank(message = "用户名为空") String userName, @RequestParam @NotBlank(message = "密码为空")String passWord, String ip) {
-        return buildResponse(userService.login(userName, passWord, ip));
+        //http://localhost:9920/oauth/token?username=user_1&password=123456&grant_type=password&scope=select&client_id=client_2&client_secret=123456
+        String url = createLoginUrl(userName, passWord);
+        String result = HttpClientUtil.httpPostRequest(url);
+        JSONObject json = JSONObject.parseObject(result);
+        Response response = new Response();
+        if (json.containsKey("access_token")) {
+            response.setCode(ResultEnum.SUCCESS.getCode());
+            response.setMsg(ResultEnum.SUCCESS.getMsg());
+        }
+        else {
+            response.setCode(ResultEnum.FAIL.getCode());
+            response.setMsg(ResultEnum.FAIL.getMsg());
+        }
+        response.setData(json);
+        return buildResponse(response);
+    }
+
+    private String createLoginUrl(String userName, String password) {
+        StringBuffer sb = new StringBuffer(oauthTokenUrl);
+        sb.append("?");
+        sb.append("username=" + userName).append("&");
+        sb.append("password=" + password).append("&");
+        sb.append("grant_type=" + grantType).append("&");
+        sb.append("client_id=" + clientId).append("&");
+        sb.append("client_secret=" + clientSecret);
+        return sb.toString();
     }
 
     /**

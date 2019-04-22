@@ -16,6 +16,31 @@ spring:
          naming:
             physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       show-sql: true
+management:
+   security:
+      enabled: false
+security:
+#   basic:
+#      enabled: false
+   oauth2:
+      client:
+         access-token-uri: http://localhost:9920/oauth/token
+         user-authorization-uri: http://localhost:9920/oauth/authorize
+         authorities: oauth2
+         grant-type: password
+         client-secret: 123456
+         client-id: client_2
+      resource:
+         token-info-uri: http://localhost:9920/oauth/check_token
+         user-info-uri: http://localhost:9920/uaa/user
+         prefer-token-info: false #false使用user-info-uri，true使用token-info-uri
+         filter-order: 3
+         id: order
+   user:
+      name: user_1
+      password: 123456
+   #basic: false
+
 
 
 idCenter:

@@ -69,7 +69,7 @@ public class TestController extends BaseController {
     }
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    @ApiOperation(value = "测试swagger", httpMethod = "get")
+    @ApiOperation(value = "测试swagger", httpMethod = "GET")
     public Object hello(@RequestParam @ApiParam(name = "name", value = "名称") String name) {
 
         String s = null;

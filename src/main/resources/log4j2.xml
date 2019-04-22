@@ -53,6 +53,9 @@
         <logger name="org" level="info" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
+        <logger name="org.springframework.security" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
         <root level="debug">
             <appender-ref ref="Console"/>
             <appender-ref ref="info"/>
