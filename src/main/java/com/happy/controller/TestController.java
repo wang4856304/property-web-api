@@ -47,6 +47,9 @@ public class TestController extends BaseController {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /*@Autowired
     private IdCenterGenerateTemplate idCenterGenerateTemplate;
 
@@ -55,9 +58,6 @@ public class TestController extends BaseController {
         Long id = idCenterGenerateTemplate.nextId();
         return id;
     }*/
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     @Qualifier("jpaUserService")
@@ -142,11 +142,13 @@ public class TestController extends BaseController {
 
     @RequestMapping(value = "/testJpa", method = RequestMethod.GET)
     public Object testJpa() {
-        /*User user = new User();
+        User user = new User();
         user.setNickName("王军");
         user.setEmail("15289288565@163.com");
-        userRepository.save(user);*/
-        List<User> list = userService.findByCondition(1L, "ss", "");
-        return JSONArray.toJSONString(list);
+        userRepository.getUserList();
+
+        userService.findByCondition(1L, "", "");
+
+        return userRepository.findAll();
     }
 }

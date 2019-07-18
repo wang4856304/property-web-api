@@ -6,7 +6,7 @@
     <appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%thread]  %-5level [%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-B3-ParentSpanId},%X{X-Span-Export}] %class{36} %L %M - %msg%xEx%n"/>
         </Console>
 
         <!-- adminFile -->
@@ -56,7 +56,7 @@
         <logger name="org.springframework.security" level="debug" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
-        <root level="debug">
+        <root level="info">
             <appender-ref ref="Console"/>
             <appender-ref ref="info"/>
             <appender-ref ref="warn"/>

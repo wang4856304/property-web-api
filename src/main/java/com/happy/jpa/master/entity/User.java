@@ -1,5 +1,7 @@
 package com.happy.jpa.master.entity;
 
+import org.hibernate.annotations.ColumnTransformer;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -15,6 +17,8 @@ import java.io.Serializable;
 @Table(name = "user")
 public class User implements Serializable {
 
+    private final static String key = "7iEoPKNPw0DGUjTg";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -23,6 +27,10 @@ public class User implements Serializable {
     private String nickName;
 
     @Column(name = "email")
+    @ColumnTransformer(
+            read = "AES_DECRYPT(from_base64(email),'" + key + "')",
+            write = "to_base64(AES_ENCRYPT(?, '7iEoPKNPw0DGUjTg'))"
+    )
     private String email;
 
     @Column(name = "create_at")

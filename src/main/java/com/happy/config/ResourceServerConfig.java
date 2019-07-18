@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -61,9 +62,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                //.anyRequest().authenticated()
                 .antMatchers("/manager/login").permitAll()
-                //.anyRequest().permitAll()
+                .anyRequest().permitAll()
+                //.anyRequest().authenticated()
                 .and()
                 .httpBasic();
     }

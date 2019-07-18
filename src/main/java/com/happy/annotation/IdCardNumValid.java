@@ -21,6 +21,5 @@ import java.lang.annotation.Target;
 public @interface IdCardNumValid {
     String message() default "身份证格式不合法";
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 }
