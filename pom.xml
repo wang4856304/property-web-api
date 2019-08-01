@@ -198,15 +198,15 @@
             <version>2.2.2</version>
         </dependency>-->
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
-            &lt;!&ndash;<version>2.0.1.RELEASE</version>&ndash;&gt;
-        </dependency>-->
+            <version>2.0.1.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
