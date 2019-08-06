@@ -70,11 +70,11 @@
             <artifactId>idcenter</artifactId>
             <version>1.0</version>
         </dependency>-->
-        <!--<dependency>
+        <dependency>
             <groupId>com.wj</groupId>
             <artifactId>simplePoi</artifactId>
             <version>1.0.0</version>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
