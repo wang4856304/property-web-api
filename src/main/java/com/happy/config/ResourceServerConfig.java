@@ -1,6 +1,6 @@
 package com.happy.config;
 
-import com.happy.security.MyUserInfoTokenServices;
+import com.happy.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.authserver.AuthorizationServerProperties;
@@ -10,6 +10,11 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoT
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.UnanimousBased;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
@@ -21,9 +26,13 @@ import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author jun.wang
@@ -52,6 +61,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private UserInfoRestTemplateFactory userInfoRestTemplateFactory;
 
+    //@Autowired
+    //private DynamicallyUrlInterceptor dynamicallyUrlInterceptor;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -62,11 +74,20 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/manager/login").permitAll()
-                .anyRequest().permitAll()
-                //.anyRequest().authenticated()
+                //.antMatchers("/test/tests").permitAll()//配置允许直接访问的url
+                //.anyRequest().permitAll()////所有url不要求权限认证
+                .anyRequest().authenticated()//所有url要求权限认证
+                /*.withObjectPostProcessor(new ObjectPostProcessor<DynamicallyUrlInterceptor>() {
+                    public <o extends DynamicallyUrlInterceptor> o postProcess(
+                            o fsi) {
+                        //fsi.setSecurityMetadataSource(new FilterSecurityMetadataSource());
+                        //fsi.setAccessDecisionManager(accessDecisionManager());
+                        return fsi;
+                    }
+                })*/
                 .and()
                 .httpBasic();
+        http.addFilterBefore(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class);
     }
 
     @Override
@@ -99,4 +120,23 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public AccessTokenConverter accessTokenConverter() {
         return new DefaultAccessTokenConverter();
     }*/
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        List<AccessDecisionVoter<? extends Object>> decisionVoters
+                = Arrays.asList(
+                //new WebExpressionVoter(),
+                new RoleBasedVoter());
+        return new CommonAccessDecisionManager(decisionVoters);
+    }
+
+    @Bean
+    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
+        DynamicallyUrlInterceptor dynamicallyUrlInterceptor = new DynamicallyUrlInterceptor();
+        dynamicallyUrlInterceptor.setSecurityMetadataSource(new FilterSecurityMetadataSource());
+        dynamicallyUrlInterceptor.setAccessDecisionManager(accessDecisionManager());
+        return dynamicallyUrlInterceptor;
+    }
 }
+
+
