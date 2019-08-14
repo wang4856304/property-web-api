@@ -31,10 +31,16 @@ public class FilterSecurityMetadataSource implements FilterInvocationSecurityMet
     public FilterSecurityMetadataSource() {
         Map<RequestMatcher, Collection<ConfigAttribute>> map = new HashMap<>();
         AntPathRequestMatcher matcher = new AntPathRequestMatcher("/test/hello");
-        SecurityConfig config = new SecurityConfig("ROLE_ANONYMOUS");
-        List<ConfigAttribute> configs = new ArrayList<>();
-        configs.add(config);
+        //SecurityConfig config = new SecurityConfig("ROLE_ANONYMOUS");
+        List<ConfigAttribute> configs = SecurityConfig.createList("1");
+        //configs.add(config);
         map.put(matcher,configs);
+
+        AntPathRequestMatcher matcher1 = new AntPathRequestMatcher("/test/test");
+        //SecurityConfig config = new SecurityConfig("ROLE_ANONYMOUS");
+        List<ConfigAttribute> configs1 = SecurityConfig.createList("0");
+        //configs.add(config);
+        map.put(matcher1,configs1);
         requestMap = map;
     }
 
@@ -49,6 +55,10 @@ public class FilterSecurityMetadataSource implements FilterInvocationSecurityMet
         // list of attributes (这里初始话你的权限数据)
         //List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();
 
+        boolean isMatch = requestMap.keySet().stream().anyMatch(requestMatcher -> requestMatcher.matches(request));
+        if (!isMatch) {
+            throw new RuntimeException("can not find method");
+        }
         //遍历我们初始化的权限数据，找到对应的url对应的权限
         for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : requestMap
                 .entrySet()) {

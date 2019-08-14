@@ -81,8 +81,9 @@ public class MyUserInfoTokenServices extends UserInfoTokenServices {
 
             return (Map)((OAuth2RestOperations)restTemplate).getForEntity(path, Map.class, new Object[0]).getBody();
         } catch (Exception var6) {
-            this.logger.warn("Could not fetch user details: " + var6.getClass() + ", " + var6.getMessage());
-            return Collections.singletonMap("error", "Could not fetch user details");
+            this.logger.error("Could not fetch user details: " + var6.getClass() + ", " + var6.getMessage());
+            throw new RuntimeException("Could not fetch user details: " + var6.getClass() + ", " + var6.getMessage());
+            //return Collections.singletonMap("error", "Could not fetch user details");
         }
     }
 

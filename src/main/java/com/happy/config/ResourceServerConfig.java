@@ -75,8 +75,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 //.antMatchers("/test/tests").permitAll()//配置允许直接访问的url
-                //.anyRequest().permitAll()////所有url不要求权限认证
-                .anyRequest().authenticated()//所有url要求权限认证
+                .anyRequest().permitAll()////所有url不要求权限认证
+                //.anyRequest().authenticated()//所有url要求权限认证
                 /*.withObjectPostProcessor(new ObjectPostProcessor<DynamicallyUrlInterceptor>() {
                     public <o extends DynamicallyUrlInterceptor> o postProcess(
                             o fsi) {
@@ -123,10 +123,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Bean
     public AccessDecisionManager accessDecisionManager() {
+        String clientId = environment.getProperty("security.oauth2.client.client-id");
+        String userInfoUrl = environment.getProperty("security.oauth2.resource.user-info-uri");
+        MyUserInfoTokenServices userInfoTokenServices = new MyUserInfoTokenServices(userInfoUrl, clientId);
+        userInfoTokenServices.setRestTemplate(userInfoRestTemplateFactory.getUserInfoRestTemplate());
         List<AccessDecisionVoter<? extends Object>> decisionVoters
                 = Arrays.asList(
                 //new WebExpressionVoter(),
-                new RoleBasedVoter());
+                new RoleBasedVoter(userInfoTokenServices));
         return new CommonAccessDecisionManager(decisionVoters);
     }
 
